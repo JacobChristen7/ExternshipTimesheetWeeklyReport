@@ -1,0 +1,8 @@
+.spin-once {
+  display: inline-block;
+  transition: transform 1s ease-in-out;
+}
+
+.spin-once:hover {
+  transform: rotate(360deg);
+}
