@@ -3,53 +3,75 @@
       <h2 class="mb-2 dark:text-white transition-colors duration-300 text-xl font-semibold">Week {{ weekNumber }}:</h2>
       <p class="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">{{ startDate }} - - - {{ endDate }}</p>
       
-      <div class="grid grid-cols-3 transition-colors duration-300">
+      <div class="grid grid-cols-4 transition-colors duration-300">
         <!-- Header Row -->
         <div class="bg-gray-200 dark:bg-gray-700 px-4 py-2 font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-300">Day</div>
         <div class="bg-gray-200 dark:bg-gray-700 px-4 py-2 font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-300">Date</div>
         <div class="bg-gray-200 dark:bg-gray-700 px-4 py-2 font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-300">Hours</div>
+        <div class="bg-gray-200 dark:bg-gray-700 px-4 py-2 font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-300">Notes</div>
         
         <!-- Days -->
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Monday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/1/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+        </div>
+        <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+          <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
         
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Tuesday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/2/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+        </div>
+        <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+          <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
         
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Wednesday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/3/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+        </div>
+        <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+          <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
         
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Thursday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/4/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+        </div>
+        <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+          <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
         
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Friday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/5/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+        </div>
+        <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+          <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
         
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Saturday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/6/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+        </div>
+        <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+          <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
         
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Sunday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/7/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
-          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          <input type="number" value="0" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+        </div>
+        <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+          <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
       </div>
       
