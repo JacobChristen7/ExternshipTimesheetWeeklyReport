@@ -11,6 +11,25 @@
         <div class="bg-gray-200 dark:bg-gray-700 px-4 py-2 font-semibold text-gray-800 dark:text-gray-200 transition-colors duration-300">Notes</div>
         
         <!-- Days -->
+        <ng-container *ngFor="let day of days">
+          <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+            {{ day.day }}
+          </div>
+          <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+            {{ day.date }}
+          </div>
+          <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+            <input type="number" [(ngModel)]="day.hours" min="0" step="0.5" class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:text-gray-200 dark:border-white transition-colors duration-300">
+          </div>
+          <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+            <input type="text" [(ngModel)]="day.notes" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
+          </div>
+        </ng-container>
+      </div>
+        
+        
+        
+        <!--
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">Monday</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">12/1/2025</div>
         <div class="px-4 py-2 text-gray-800 dark:text-gray-200 transition-colors duration-300">
@@ -74,6 +93,7 @@
           <input type="text" placeholder="Notes..." class="w-full bg-transparent text-center focus:outline-none focus:ring-2 focus:ring-blue-300 rounded py-1 dark:placeholder:text-gray-200 dark:text-gray-200 dark:border-white transition-colors duration-300 placeholder:transition-colors placeholder:duration-300">
         </div>
       </div>
+      -->
       
       <!-- Total Hours -->
       <div class="mt-4 p-4 bg-gray-200 dark:bg-gray-700 rounded-md transition-colors duration-300">

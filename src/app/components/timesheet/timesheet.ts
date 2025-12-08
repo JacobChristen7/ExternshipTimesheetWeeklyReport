@@ -2,10 +2,18 @@ import { Component } from '@angular/core';
 import { WeekCard } from './week-card/week-card';
 import { CommonModule } from '@angular/common';
 
+export interface DayEntry {
+  day: string;
+  date: string;
+  hours: number;
+  notes: string;
+}
+
 interface Week {
   weekNumber: number;
   startDate: string;
   endDate: string;
+  days: DayEntry[];
 }
 
 @Component({
@@ -17,11 +25,32 @@ interface Week {
 })
 export class Timesheet {
   weeks: Week[] = [
-    { weekNumber: 1, startDate: '12/1/2025', endDate: '12/7/2025' },
-    { weekNumber: 2, startDate: '12/8/2025', endDate: '12/14/2025' },
-    { weekNumber: 3, startDate: '12/15/2025', endDate: '12/21/2025' },
-    { weekNumber: 4, startDate: '12/22/2025', endDate: '12/28/2025' },
-    { weekNumber: 5, startDate: '12/29/2025', endDate: '1/4/2026' }
+    { weekNumber: 1, startDate: '12/1/2025', endDate: '12/7/2025', 
+      days: [
+      { day: 'Monday', date: '12/1/2025', hours: 0, notes: '' },
+      { day: 'Tuesday', date: '12/2/2025', hours: 0, notes: '' },
+      { day: 'Wednesday', date: '12/3/2025', hours: 0, notes: '' },
+      { day: 'Thursday', date: '12/4/2025', hours: 0, notes: '' },
+      { day: 'Friday', date: '12/5/2025', hours: 0, notes: '' },
+      { day: 'Saturday', date: '12/6/2025', hours: 0, notes: '' },
+      { day: 'Sunday', date: '12/7/2025', hours: 0, notes: '' }
+    ]
+    },
+    { weekNumber: 2, startDate: '12/8/2025', endDate: '12/14/2025', 
+      days: [
+      { day: 'Monday', date: '12/8/2025', hours: 0, notes: '' },
+      { day: 'Tuesday', date: '12/9/2025', hours: 0, notes: '' },
+      { day: 'Wednesday', date: '12/10/2025', hours: 0, notes: '' },
+      { day: 'Thursday', date: '12/11/2025', hours: 0, notes: '' },
+      { day: 'Friday', date: '12/12/2025', hours: 0, notes: '' },
+      { day: 'Saturday', date: '12/13/2025', hours: 0, notes: '' },
+      { day: 'Sunday', date: '12/14/2025', hours: 0, notes: '' }
+    ]
+    },
+    // { weekNumber: 2, startDate: '12/8/2025', endDate: '12/14/2025' },
+    // { weekNumber: 3, startDate: '12/15/2025', endDate: '12/21/2025' },
+    // { weekNumber: 4, startDate: '12/22/2025', endDate: '12/28/2025' },
+    // { weekNumber: 5, startDate: '12/29/2025', endDate: '1/4/2026' }
   ];
 
   currentPage = 0;
