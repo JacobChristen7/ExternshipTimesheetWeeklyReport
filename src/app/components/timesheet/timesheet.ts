@@ -47,10 +47,6 @@ export class Timesheet {
       { day: 'Sunday', date: '12/14/2025', hours: 0, notes: '' }
     ]
     },
-    // { weekNumber: 2, startDate: '12/8/2025', endDate: '12/14/2025' },
-    // { weekNumber: 3, startDate: '12/15/2025', endDate: '12/21/2025' },
-    // { weekNumber: 4, startDate: '12/22/2025', endDate: '12/28/2025' },
-    // { weekNumber: 5, startDate: '12/29/2025', endDate: '1/4/2026' }
   ];
 
   currentPage = 0;
