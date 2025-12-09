@@ -74,4 +74,11 @@ export class Timesheet {
   get canGoNext(): boolean {
     return this.currentPage < this.weeks.length - 1;
   }
+
+  get totalAllWeeks(): number {
+    return this.weeks.reduce((sum, week) => {
+      const weekTotal = week.days.reduce((s, day) => s + (day.hours || 0), 0);
+      return sum + weekTotal;
+    }, 0);
+  }
 }

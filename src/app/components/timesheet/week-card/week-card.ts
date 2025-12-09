@@ -15,4 +15,9 @@ export class WeekCard {
   @Input() startDate!: string;
   @Input() endDate!: string;
   @Input() days!: DayEntry[];
+  @Input() totalAllWeeks!: number;
+
+  get weeklyTotal(): number {
+    return this.days.reduce((sum, day) => sum + (day.hours || 0), 0);
+  }
 }
