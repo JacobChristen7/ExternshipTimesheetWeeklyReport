@@ -7,8 +7,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       
       <!-- Email Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Email <span class="text-red-500">*</span>
         </label>
         <input
@@ -16,24 +16,24 @@
           name="email"
           type="email"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your email"
         />
       </div>
 
       <!-- Week Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Week <span class="text-red-500">*</span>
         </label>
         <select 
           [(ngModel)]="week" 
           name="week"
           required
-          class="w-full py-2 mt-6 rounded-md border border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer">
-          <option value="" disabled selected>Choose</option>
+          class="w-full py-2 mt-6 rounded-md border border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent cursor-pointer">
+          <option value="" disabled selected hidden>Choose</option>
           <option value="Week 1">Week 1</option>
           <option value="Week 2">Week 2</option>
           <option value="Week 3">Week 3</option>
@@ -42,17 +42,17 @@
       </div>
 
       <!-- Student Name Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Student Name <span class="text-red-500">*</span>
         </label>
         <select 
           [(ngModel)]="studentName" 
           name="studentName"
           required
-          class="w-full py-2 mt-6 rounded-md border border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer">
-          <option value="" disabled selected>Choose</option>
+          class="w-full py-2 mt-6 rounded-md border border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent cursor-pointer">
+          <option value="" disabled selected hidden>Choose</option>
           <option value="Student 1">Student 1</option>
           <option value="Student 2">Student 2</option>
           <option value="Student 3">Student 3</option>
@@ -60,8 +60,8 @@
       </div>
 
       <!-- Manager/Supervisor Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Manager/Supervisor <span class="text-red-500">*</span>
         </label>
         <input 
@@ -69,24 +69,24 @@
           name="manager"
           type="text"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
 
       <!-- Company Name Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Company <span class="text-red-500">*</span>
         </label>
         <select 
           [(ngModel)]="company"
           name="company"
           required
-          class="w-full py-2 mt-6 rounded-md border border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer">
-          <option value="" disabled selected>Choose</option>
+          class="w-full py-2 mt-6 rounded-md border border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent cursor-pointer">
+          <option value="" disabled selected hidden>Choose</option>
           <option value="Company 1">Company 1</option>
           <option value="Company 2">Company 2</option>
           <option value="Company 3">Company 3</option>
@@ -94,8 +94,8 @@
       </div>
 
       <!-- Programming Languages Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Programming or scripting languages you learned this week? <span class="text-red-500">*</span>
         </label>
         <input 
@@ -103,15 +103,15 @@
           name="programmingLanguages"
           type="text"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
 
       <!-- Accomplishments Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           What have you accomplished or gained this week? <span class="text-red-500">*</span>
         </label>
         <input 
@@ -119,15 +119,15 @@
           name="accomplishments"
           type="text"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
 
       <!-- Challenges Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           What challenges have you faced this week? <span class="text-red-500">*</span>
         </label>
         <input 
@@ -135,15 +135,15 @@
           name="challenges"
           type="text"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
 
       <!-- Goals Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           What goals do you have for the upcoming week? <span class="text-red-500">*</span>
         </label>
         <input 
@@ -151,15 +151,15 @@
           name="goals"
           type="text"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
 
       <!-- Hours This Week Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           How many hours did you accrue this week? <span class="text-red-500">*</span>
         </label>
         <input 
@@ -167,15 +167,15 @@
           name="hoursThisWeek"
           type="number"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
 
       <!-- Total Hours Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           How many total hours have you accrued so far in your externship? <span class="text-red-500">*</span>
         </label>
         <input 
@@ -183,15 +183,15 @@
           name="totalHours"
           type="number"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
 
       <!-- Questions/Concerns Field -->
-      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between">
-        <label class="block text-lg font-medium text-gray-700 mb-2">
+      <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
+        <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Any questions or concerns that the MTECH Coordinator need to be aware of? If yes, please explain. <span class="text-red-500">*</span>
         </label>
         <input 
@@ -199,8 +199,8 @@
           name="questions"
           type="text"
           required
-          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900
-                 focus:outline-none focus:ring-0 focus:border-blue-500"
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
           placeholder="Your answer"
         />
       </div>
