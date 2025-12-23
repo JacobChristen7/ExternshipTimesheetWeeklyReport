@@ -189,7 +189,6 @@ export class Timesheet {
     }
 
     this.addWeekFromDate(selectedDate);
-    this.closeAddWeekPopup();
   }
 
   // Add week based on selected date
@@ -200,6 +199,16 @@ export class Timesheet {
     // Get start and end dates
     const startDate = newWeekDays[0].date;  // Monday
     const endDate = newWeekDays[6].date;    // Sunday
+
+    // Check if this week already exists
+    const weekExists = this.weeks.some(week => 
+      week.startDate === startDate && week.endDate === endDate
+    );
+    
+    if (weekExists) {
+      this.dateError = 'This week already exists!';
+      return; // Don't add the week, keep popup open
+    }
     
     // Create new week object
     const newWeek: Week = {
@@ -227,5 +236,8 @@ export class Timesheet {
     // Navigate to the new week (find its new position after sorting)
     const newWeekIndex = this.weeks.findIndex(w => w.startDate === startDate);
     this.currentPage = newWeekIndex;
+    
+    // Close popup only on success
+    this.closeAddWeekPopup();
   }
 }
