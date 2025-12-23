@@ -211,8 +211,21 @@ export class Timesheet {
     
     // Add to weeks array
     this.weeks.push(newWeek);
+
+    // Sort weeks by start date (oldest to newest)
+    this.weeks.sort((a, b) => {
+      const dateA = new Date(a.startDate);
+      const dateB = new Date(b.startDate);
+      return dateA.getTime() - dateB.getTime();
+    });
+
+    // Update week numbers after sorting
+    this.weeks.forEach((week, index) => {
+      week.weekNumber = index + 1;
+    });
     
-    // Navigate to the new week
-    this.currentPage = this.weeks.length - 1;
+    // Navigate to the new week (find its new position after sorting)
+    const newWeekIndex = this.weeks.findIndex(w => w.startDate === startDate);
+    this.currentPage = newWeekIndex;
   }
 }
