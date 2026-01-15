@@ -40,6 +40,20 @@ export class Login {
     }
   }
 
+  async signInWithGoogle() {
+    this.errorMessage = '';
+    this.loading = true;
+
+    try {
+      await this.authService.signInWithGoogle();
+      this.router.navigate(['/']);
+    } catch (error: any) {
+      this.errorMessage = error;
+    } finally {
+      this.loading = false;
+    }
+  }
+
   toggleMode() {
     this.isSignUp = !this.isSignUp;
     this.errorMessage = '';

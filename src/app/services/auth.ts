@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Auth, user, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
+import { Auth, user, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, User } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +34,17 @@ async signUp(email: string, password: string) {
   async signIn(email: string, password: string) {
     try {
       const credential = await signInWithEmailAndPassword(this.auth, email, password);
+      return credential.user;
+    } catch (error: any) {
+      throw this.handleError(error);
+    }
+  }
+
+  // Google sign in
+  async signInWithGoogle() {
+    try {
+      const provider = new GoogleAuthProvider();
+      const credential = await signInWithPopup(this.auth, provider);
       return credential.user;
     } catch (error: any) {
       throw this.handleError(error);
