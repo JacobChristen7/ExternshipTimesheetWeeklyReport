@@ -15,8 +15,22 @@ export class Navbar {
   private router = inject(Router);
   isDarkMode = signal(false);
 
+  constructor() {
+    // Load dark mode preference from localStorage on init
+    const savedTheme = localStorage.getItem('darkMode');
+    if (savedTheme === 'true') {
+      this.isDarkMode.set(true);
+      document.documentElement.classList.add('dark');
+    }
+  }
+
   toggleDarkMode() {
     this.isDarkMode.set(!this.isDarkMode());
+    
+    // Save preference to localStorage
+    localStorage.setItem('darkMode', this.isDarkMode().toString());
+    
+    // Apply the theme
     if (this.isDarkMode()) {
       document.documentElement.classList.add('dark');
     } else {
