@@ -11,6 +11,7 @@ export interface DayEntry {
 export interface WeekData {
   id?: string; // Firestore document ID
   userId: string;
+  userEmail?: string;
   weekStartDate: string;
   weekEndDate: string;
   totalHours: number;
@@ -31,8 +32,12 @@ export class Timesheet {
     const userId = this.authService.getCurrentUserId();
     if (!userId) throw new Error('User not logged in');
 
+    const currentUser = this.authService.currentUser();
+    const userEmail = currentUser?.email || undefined;
+
     const weekData: WeekData = {
       userId: userId,
+      userEmail: userEmail,
       weekStartDate: startDate,
       weekEndDate: endDate,
       totalHours: days.reduce((sum, day) => sum + (day.hours || 0), 0),
