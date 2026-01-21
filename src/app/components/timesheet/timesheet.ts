@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { WeekCard } from './week-card/week-card';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Timesheet as TimesheetService } from '../../services/timesheet';
 
 export interface DayEntry {
   day: string;
@@ -11,6 +12,7 @@ export interface DayEntry {
 }
 
 interface Week {
+  id?: string;  // Firestore document ID
   weekNumber: number;
   startDate: string;
   endDate: string;
@@ -24,37 +26,84 @@ interface Week {
   templateUrl: './timesheet.html',
   styleUrl: './timesheet.css',
 })
-export class Timesheet {
+export class Timesheet implements OnInit {
+  private timesheetService = inject(TimesheetService);
+  
   showAddWeekPopup = false;
   dateInput = '';
   dateError = '';
   
-  weeks: Week[] = [
-    { weekNumber: 1, startDate: '12/1/2025', endDate: '12/7/2025', 
-      days: [
-      { day: 'Monday', date: '12/1/2025', hours: 0, notes: '' },
-      { day: 'Tuesday', date: '12/2/2025', hours: 0, notes: '' },
-      { day: 'Wednesday', date: '12/3/2025', hours: 0, notes: '' },
-      { day: 'Thursday', date: '12/4/2025', hours: 0, notes: '' },
-      { day: 'Friday', date: '12/5/2025', hours: 0, notes: '' },
-      { day: 'Saturday', date: '12/6/2025', hours: 0, notes: '' },
-      { day: 'Sunday', date: '12/7/2025', hours: 0, notes: '' }
-    ]
-    },
-    { weekNumber: 2, startDate: '12/8/2025', endDate: '12/14/2025', 
-      days: [
-      { day: 'Monday', date: '12/8/2025', hours: 0, notes: '' },
-      { day: 'Tuesday', date: '12/9/2025', hours: 0, notes: '' },
-      { day: 'Wednesday', date: '12/10/2025', hours: 0, notes: '' },
-      { day: 'Thursday', date: '12/11/2025', hours: 0, notes: '' },
-      { day: 'Friday', date: '12/12/2025', hours: 0, notes: '' },
-      { day: 'Saturday', date: '12/13/2025', hours: 0, notes: '' },
-      { day: 'Sunday', date: '12/14/2025', hours: 0, notes: '' }
-    ]
-    },
-  ];
-
+  weeks: Week[] = [];  // Start with empty array - will load from Firestore
   currentPage = 0;
+  isLoading = false;
+
+  // Load weeks from Firestore when component initializes
+  async ngOnInit() {
+    await this.loadWeeks();
+  }
+
+  // Load all weeks for current user from Firestore
+  async loadWeeks() {
+    this.isLoading = true;
+    try {
+      const firestoreWeeks = await this.timesheetService.getUserWeeks();
+      
+      // Sort weeks by start date
+      firestoreWeeks.sort((a, b) => {
+        const dateA = new Date(a.weekStartDate);
+        const dateB = new Date(b.weekStartDate);
+        return dateA.getTime() - dateB.getTime();
+      });
+
+      // Convert to component Week format
+      this.weeks = firestoreWeeks.map((week, index) => ({
+        id: week.id,
+        weekNumber: index + 1,
+        startDate: week.weekStartDate,
+        endDate: week.weekEndDate,
+        days: week.days.map(day => ({
+          day: this.getDayNameFromDate(day.date),
+          date: day.date,
+          hours: day.hours,
+          notes: day.notes
+        }))
+      }));
+    } catch (error) {
+      console.error('Error loading weeks:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  // Called when user clicks out of hours field
+  async onHoursChange(week: Week, dayIndex: number) {
+    if (!week.id) return;  // Skip if no Firestore ID
+
+    try {
+      // Convert days to Firestore format (without 'day' field)
+      const daysForFirestore = week.days.map(day => ({
+        date: day.date,
+        hours: day.hours,
+        notes: day.notes
+      }));
+
+      await this.timesheetService.updateDay(
+        week.id, 
+        dayIndex, 
+        daysForFirestore[dayIndex], 
+        daysForFirestore
+      );
+    } catch (error) {
+      console.error('Error updating day:', error);
+    }
+  }
+
+  // Helper: Get day name from date string
+  getDayNameFromDate(dateString: string): string {
+    const date = new Date(dateString);
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    return days[date.getDay()];
+  }
 
   get currentWeek(): Week {
     return this.weeks[this.currentPage];
@@ -86,8 +135,6 @@ export class Timesheet {
       return sum + weekTotal;
     }, 0);
   }
-
-  // Add week/calendar logic
 
   // Helper: Get day name (0=Sunday, 1=Monday, etc.)
   getDayName(dayIndex: number): string {
@@ -180,7 +227,7 @@ export class Timesheet {
     return date;
   }
 
-  addWeek(): void {
+  async addWeek(): Promise<void> {
     const selectedDate = this.parseDate(this.dateInput);
     
     if (!selectedDate) {
@@ -188,11 +235,11 @@ export class Timesheet {
       return;
     }
 
-    this.addWeekFromDate(selectedDate);
+    await this.addWeekFromDate(selectedDate);
   }
 
   // Add week based on selected date
-  addWeekFromDate(selectedDate: Date): void {
+  async addWeekFromDate(selectedDate: Date): Promise<void> {
     // Generate week days
     const newWeekDays = this.generateWeekFromDate(selectedDate);
     
@@ -207,37 +254,34 @@ export class Timesheet {
     
     if (weekExists) {
       this.dateError = 'This week already exists!';
-      return; // Don't add the week, keep popup open
+      return;
     }
-    
-    // Create new week object
-    const newWeek: Week = {
-      weekNumber: this.weeks.length + 1,
-      startDate: startDate,
-      endDate: endDate,
-      days: newWeekDays
-    };
-    
-    // Add to weeks array
-    this.weeks.push(newWeek);
 
-    // Sort weeks by start date (oldest to newest)
-    this.weeks.sort((a, b) => {
-      const dateA = new Date(a.startDate);
-      const dateB = new Date(b.startDate);
-      return dateA.getTime() - dateB.getTime();
-    });
+    try {
+      // Convert to Firestore format (without 'day' field)
+      const daysForFirestore = newWeekDays.map(day => ({
+        date: day.date,
+        hours: day.hours,
+        notes: day.notes
+      }));
 
-    // Update week numbers after sorting
-    this.weeks.forEach((week, index) => {
-      week.weekNumber = index + 1;
-    });
-    
-    // Navigate to the new week (find its new position after sorting)
-    const newWeekIndex = this.weeks.findIndex(w => w.startDate === startDate);
-    this.currentPage = newWeekIndex;
-    
-    // Close popup only on success
-    this.closeAddWeekPopup();
+      // Save to Firestore
+      const docId = await this.timesheetService.createWeek(startDate, endDate, daysForFirestore);
+
+      // Reload all weeks from Firestore
+      await this.loadWeeks();
+      
+      // Navigate to the newly created week
+      const newWeekIndex = this.weeks.findIndex(w => w.id === docId);
+      if (newWeekIndex >= 0) {
+        this.currentPage = newWeekIndex;
+      }
+      
+      // Close popup on success
+      this.closeAddWeekPopup();
+    } catch (error) {
+      console.error('Error adding week:', error);
+      this.dateError = 'Failed to add week. Please try again.';
+    }
   }
 }

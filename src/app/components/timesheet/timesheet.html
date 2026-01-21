@@ -23,7 +23,7 @@
       
       <!-- Page Number -->
       <p class="text-gray-800 dark:text-gray-200 transition-colors duration-300 font-medium min-w-[80px] text-center">
-        Page {{ currentPage + 1 }} of {{ weeks.length }}
+        Page {{ weeks.length > 0 ? currentPage + 1 : 0 }} of {{ weeks.length }}
       </p>
       
       <!-- Next Arrow -->
@@ -44,7 +44,20 @@
       class="border-t border-gray-300 dark:border-gray-700 transition-colors duration-300 -mx-4 sm:-mx-6 lg:-mx-8" />
   
   <div class="grid grid-cols-1 md:grid-cols-1 grid-rows-1 gap-4">
-    <app-week-card [weekNumber]="currentWeek.weekNumber" [startDate]="currentWeek.startDate" [endDate]="currentWeek.endDate" [days]="currentWeek.days" [totalAllWeeks]="totalAllWeeks"></app-week-card>
+    <div *ngIf="weeks.length === 0" class="text-center py-8">
+      <p class="text-gray-600 dark:text-gray-300 text-lg">No weeks added yet. Click "Add a Week" to get started!</p>
+    </div>
+
+    <app-week-card 
+      *ngIf="currentWeek"
+      [weekNumber]="currentWeek.weekNumber" 
+      [startDate]="currentWeek.startDate" 
+      [endDate]="currentWeek.endDate" 
+      [days]="currentWeek.days" 
+      [totalAllWeeks]="totalAllWeeks"
+      (hoursChanged)="onHoursChange(currentWeek, $event)"
+      (notesChanged)="onHoursChange(currentWeek, $event)">
+    </app-week-card>
   </div>
 
   <!-- Add Week Menu -->
