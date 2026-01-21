@@ -3,6 +3,7 @@ import { WeekCard } from './week-card/week-card';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Timesheet as TimesheetService } from '../../services/timesheet';
+import { Authentication } from '../../services/auth';
 
 export interface DayEntry {
   day: string;
@@ -28,6 +29,7 @@ interface Week {
 })
 export class Timesheet implements OnInit {
   private timesheetService = inject(TimesheetService);
+  private authService = inject(Authentication);
   
   showAddWeekPopup = false;
   dateInput = '';
@@ -39,7 +41,18 @@ export class Timesheet implements OnInit {
 
   // Load weeks from Firestore when component initializes
   async ngOnInit() {
-    await this.loadWeeks();
+    
+    // Wait for auth to be ready
+    this.authService.user$.subscribe(async (user) => {
+      console.log('Auth state changed, user:', user?.uid || 'null');
+      if (user) {
+        // User is logged in, load weeks
+        await this.loadWeeks();
+      } else {
+        // No user, clear weeks
+        this.weeks = [];
+      }
+    });
   }
 
   // Load all weeks for current user from Firestore
