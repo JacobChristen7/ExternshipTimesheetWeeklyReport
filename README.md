@@ -1,59 +1,93 @@
-# TimesheetApp
+# MTECH Externship Timesheet & Weekly Report
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.6.
+An Angular-based web application for tracking externship hours and submitting weekly reports. Built with Angular, Firebase Authentication, and Cloud Firestore.
 
-## Development server
+## Current Features
 
-To start a local development server, run:
+- ✅ **Authentication**: Email/password and Google Sign-In with Firebase
+- ✅ **Timesheet Tracking**: Weekly timesheet with auto-save on input deselect
+- ✅ **Route Guards**: Protected routes for authenticated users only
+- ✅ **Dark Mode**: Persistent dark/light theme toggle
+- ✅ **User-Specific Data**: Firestore security rules ensure users only see their own data
+- ✅ **Weekly Report Form**: Template right now (working on adding it to the database)
 
-```bash
-ng serve
+## Tech
+
+- **Frontend**: Angular (Standalone Components, Signals)
+- **Styling**: Tailwind CSS, Angular Material
+- **Backend**: Firebase (Auth + Firestore)
+- **Language**: TypeScript
+
+## Setup & Installation
+
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/JacobChristen7/ExternshipTimesheetWeeklyReport.git
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start development server:**
+   ```bash
+   ng serve
+   ```
+   Navigate to `http://localhost:4200/`
+
+## Database Structure
+
+This app uses Firebase Firestore with the following structure. If you're using a different database, adapt your schema accordingly:
+
+### Collections
+
+#### `timesheets` Collection
+Each document represents one week of timesheet data:
+
+```typescript
+{
+  userId: string,              // Firebase Auth UID (for filtering user data)
+  userEmail: string,           // User's email (for admin identification)
+  weekStartDate: string,       // Week start date (format: "M/D/YYYY")
+  weekEndDate: string,         // Week end date (format: "M/D/YYYY")
+  totalHours: number,          // Total hours for the week (sum of all days)
+  days: [                      // Array of 7 day objects (Monday-Sunday)
+    {
+      date: string,            // Date (format: "M/D/YYYY")
+      hours: number,           // Hours worked (0-24)
+      notes: string            // Daily notes/activities
+    },
+    // ... 6 more day objects
+  ],
+  createdAt: Timestamp,        // Firestore server timestamp
+  updatedAt: Timestamp         // Firestore server timestamp
+}
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Firestore Security Rules
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /timesheets/{timesheetId} {
+      allow read, write: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.userId;
+    }
+  }
+}
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+**Key Points:**
+- Users can only read/write their own data (filtered by `userId`)
+- All write operations require authentication
+- The `userEmail` field is optional but helpful for identifying users in the Firebase Console
+- `totalHours` is calculated and stored for quick access to weekly totals
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Angular CLI Documentation](https://angular.dev/tools/cli)
+- [Firebase Documentation](https://firebase.google.com/docs)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [RxJS Documentation](https://rxjs.dev/)
