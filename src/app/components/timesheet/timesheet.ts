@@ -61,12 +61,7 @@ export class Timesheet implements OnInit {
     try {
       const firestoreWeeks = await this.timesheetService.getUserWeeks();
       
-      // Sort weeks by start date
-      firestoreWeeks.sort((a, b) => {
-        const dateA = new Date(a.weekStartDate);
-        const dateB = new Date(b.weekStartDate);
-        return dateA.getTime() - dateB.getTime();
-      });
+      // Weeks are already sorted by weekStartDate in the service
 
       // Convert to component Week format
       this.weeks = firestoreWeeks.map((week, index) => ({

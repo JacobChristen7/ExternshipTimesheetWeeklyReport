@@ -70,6 +70,13 @@ export class Timesheet {
       } as WeekData);
     });
 
+    // Sort by weekStartDate (oldest to newest)
+    weeks.sort((a, b) => {
+      const dateA = new Date(a.weekStartDate);
+      const dateB = new Date(b.weekStartDate);
+      return dateA.getTime() - dateB.getTime();
+    });
+
     return weeks;
   }
 

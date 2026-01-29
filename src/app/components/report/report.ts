@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReportService } from '../../services/report';
 import { Authentication } from '../../services/auth';
+import { Timesheet } from '../../services/timesheet';
 
 @Component({
   selector: 'app-report',
@@ -14,6 +15,7 @@ import { Authentication } from '../../services/auth';
 export class Report implements OnInit {
   private reportService = inject(ReportService);
   private authService = inject(Authentication);
+  private timesheetService = inject(Timesheet);
 
   email = '';
   week = '';
@@ -34,11 +36,32 @@ export class Report implements OnInit {
 
   ngOnInit() {
     // Adds email from authenticated user into email field
-    this.authService.user$.subscribe(user => {
+    this.authService.user$.subscribe(async user => {
       if (user?.email) {
         this.email = user.email;
+        
+        // Auto-calculate hours from timesheet data
+        await this.calculateHours();
       }
     });
+  }
+
+  async calculateHours() {
+    try {
+      // Get all user's timesheet weeks (already sorted by weekStartDate, oldest to newest)
+      const weeks = await this.timesheetService.getUserWeeks();
+      
+      // Calculate total hours across all weeks
+      this.totalHours = weeks.reduce((sum, week) => sum + (week.totalHours || 0), 0);
+      
+      // Get the most recent week's hours (last in sorted array)
+      if (weeks.length > 0) {
+        this.hoursThisWeek = weeks[weeks.length - 1]?.totalHours || 0;
+      }
+    } catch (error) {
+      console.error('Error calculating hours:', error);
+      // If calculation fails, leave at 0 - user can still enter manually
+    }
   }
   
   async onSubmit() {
@@ -83,7 +106,7 @@ export class Report implements OnInit {
     }
   }
 
-  private resetForm() {
+  private async resetForm() {
     // Keep email, reset everything else
     this.week = '';
     this.studentName = '';
@@ -93,8 +116,9 @@ export class Report implements OnInit {
     this.accomplishments = '';
     this.challenges = '';
     this.goals = '';
-    this.hoursThisWeek = 0;
-    this.totalHours = 0;
     this.questions = '';
+    
+    // Recalculate hours for next report
+    await this.calculateHours();
   }
 }
