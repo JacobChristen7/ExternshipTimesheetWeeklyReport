@@ -39,6 +39,8 @@ export class Timesheet implements OnInit {
   currentPage = 0;
   isLoading = false;
 
+  private readonly CURRENT_PAGE_KEY = 'timesheet-current-page';
+
   // Load weeks from Firestore when component initializes
   async ngOnInit() {
     
@@ -76,11 +78,31 @@ export class Timesheet implements OnInit {
           notes: day.notes
         }))
       }));
+
+      // Restore saved page from localStorage
+      this.restoreCurrentPage();
     } catch (error) {
       console.error('Error loading weeks:', error);
     } finally {
       this.isLoading = false;
     }
+  }
+
+  // Restore current page from localStorage
+  private restoreCurrentPage(): void {
+    const savedPage = localStorage.getItem(this.CURRENT_PAGE_KEY);
+    if (savedPage !== null) {
+      const pageNumber = parseInt(savedPage, 10);
+      // Make sure the page number is valid
+      if (!isNaN(pageNumber) && pageNumber >= 0 && pageNumber < this.weeks.length) {
+        this.currentPage = pageNumber;
+      }
+    }
+  }
+
+  // Save current page to localStorage
+  private saveCurrentPage(): void {
+    localStorage.setItem(this.CURRENT_PAGE_KEY, this.currentPage.toString());
   }
 
   // Called when user clicks out of hours field
@@ -120,12 +142,14 @@ export class Timesheet implements OnInit {
   previousWeek(): void {
     if (this.currentPage > 0) {
       this.currentPage--;
+      this.saveCurrentPage();
     }
   }
 
   nextWeek(): void {
     if (this.currentPage < this.weeks.length - 1) {
       this.currentPage++;
+      this.saveCurrentPage();
     }
   }
 
