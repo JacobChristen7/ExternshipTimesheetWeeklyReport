@@ -35,6 +35,10 @@ export class Timesheet implements OnInit {
   dateInput = '';
   dateError = '';
   
+  // Delete confirmation modal
+  showDeleteModal = false;
+  weekToDelete: Week | null = null;
+  
   weeks: Week[] = [];  // Start with empty array - will load from Firestore
   currentPage = 0;
   isLoading = false;
@@ -217,6 +221,40 @@ export class Timesheet implements OnInit {
   closeAddWeekPopup(): void {
     this.showAddWeekPopup = false;
     this.dateError = '';
+  }
+
+  openDeleteModal(week: Week): void {
+    this.weekToDelete = week;
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+    this.weekToDelete = null;
+  }
+
+  // Delete the week after confirmation
+  async confirmDelete(): Promise<void> {
+    if (!this.weekToDelete || !this.weekToDelete.id) {
+      return;
+    }
+
+    try {
+      // Delete from Firestore
+      await this.timesheetService.deleteWeek(this.weekToDelete.id);
+
+      // If user is deleting the current week and it's the last one go back one page
+      if (this.currentPage === this.weeks.length - 1 && this.currentPage > 0) {
+        this.currentPage--;
+      }
+
+      // Reload weeks from Firestore
+      await this.loadWeeks();
+
+      this.closeDeleteModal();
+    } catch (error) {
+      console.error('Error deleting week:', error);
+    }
   }
 
   // Validate and parse date input

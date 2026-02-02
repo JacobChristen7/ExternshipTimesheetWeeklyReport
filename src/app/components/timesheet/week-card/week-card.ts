@@ -23,6 +23,9 @@ export class WeekCard {
   // Emit event when a day's notes change
   @Output() notesChanged = new EventEmitter<number>();
 
+  // Emit event when delete button is clicked
+  @Output() deleteRequested = new EventEmitter<void>();
+
   get weeklyTotal(): number {
     return this.days.reduce((sum, day) => sum + (day.hours || 0), 0);
   }
@@ -35,5 +38,10 @@ export class WeekCard {
   // Called when user clicks out of notes field
   onNotesBlur(dayIndex: number) {
     this.notesChanged.emit(dayIndex);
+  }
+
+  // Called when delete button is clicked
+  onDeleteClick() {
+    this.deleteRequested.emit();
   }
 }
