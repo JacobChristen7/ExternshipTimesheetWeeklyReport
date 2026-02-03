@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Authentication } from '../../services/auth';
 
 @Component({
@@ -10,15 +10,22 @@ import { Authentication } from '../../services/auth';
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   private authService = inject(Authentication);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   email = '';
   password = '';
   errorMessage = '';
   isSignUp = false;  // Toggle between sign in/sign up
   loading = false;
+  returnUrl = '/';  // Default to home page
+
+  ngOnInit() {
+    // Get the return URL from query params or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
 
   async onSubmit() {
     this.errorMessage = '';
@@ -31,8 +38,8 @@ export class Login {
         await this.authService.signIn(this.email, this.password);
       }
       
-      // Redirect to home page after successful login
-      this.router.navigate(['/']);
+      // Redirect to the return URL after successful login
+      this.router.navigateByUrl(this.returnUrl);
     } catch (error: any) {
       this.errorMessage = error;
     } finally {
@@ -46,7 +53,8 @@ export class Login {
 
     try {
       await this.authService.signInWithGoogle();
-      this.router.navigate(['/']);
+      // Redirect to the return URL after successful login
+      this.router.navigateByUrl(this.returnUrl);
     } catch (error: any) {
       this.errorMessage = error;
     } finally {

@@ -13,7 +13,8 @@ export const authGuard: CanActivateFn = (route, state) => {
       if (user) {
         return true;  // User is logged in, allow access
       } else {
-        router.navigate(['/login']);
+        // Store the attempted URL for redirecting after login
+        router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
         return false;  // Not logged in, block access
       }
     })
