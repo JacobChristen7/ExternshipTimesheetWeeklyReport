@@ -1,11 +1,15 @@
 <div class="container mx-auto max-w-7xl">
-  <h1 class="text-4xl font-bold mb-4 dark:text-white transition-colors duration-300">Congrats on your Externship! 🎉</h1>
+  <h1 class="text-4xl font-bold mb-2 dark:text-white transition-colors duration-300">Congrats on your Externship! 🎉</h1>
   <p class="text-lg text-gray-700 dark:text-gray-300 transition-colors duration-300">
     Welcome to your externship timesheet and weekly report application.
   </p>
+
+  <div class="mt-4">
+    <app-analytics></app-analytics>
+  </div>
   
-  <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-12">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center transition-all duration-300 hover:scale-105 cursor-pointer" routerLink="/timesheet">
+  <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white dark:bg-gray-800 px-6 pb-6 pt-2 rounded-lg shadow-md text-center transition-all duration-300 hover:scale-105 cursor-pointer" routerLink="/timesheet">
       <h2 class="text-2xl font-semibold mb-2 dark:text-white transition-colors duration-300">Timesheet</h2>
       <p class="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Track your externship hours</p>
       <a routerLink="/timesheet" 
@@ -14,7 +18,7 @@
       </a>
     </div>
     
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md text-center transition-all duration-300 hover:scale-105 cursor-pointer" routerLink="/report">
+    <div class="bg-white dark:bg-gray-800 px-6 pb-6 pt-2 rounded-lg shadow-md text-center transition-all duration-300 hover:scale-105 cursor-pointer" routerLink="/report">
       <h2 class="text-2xl font-semibold mb-2 dark:text-white transition-colors duration-300">Weekly Report</h2>
       <p class="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Write and submit reports</p>
       <a routerLink="/report" 

@@ -1,0 +1,52 @@
+<div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-1 rounded-lg shadow-md transition-all duration-300 mb-6">
+  <h2 class="text-xl font-bold mb-3 text-gray-800 dark:text-white transition-colors duration-300">
+      Hours Analytics
+  </h2>
+
+  @if (isLoading()) {
+    <div class="text-center py-8">
+      <p class="text-gray-600 dark:text-gray-400 text-lg">Loading analytics...</p>
+    </div>
+  } @else if (weekCount() === 0) {
+    <div class="text-center py-8">
+      <p class="text-gray-800 dark:text-gray-300 text-lg transition-colors duration-300">
+        No timesheet data yet. Start tracking your hours to see analytics!
+      </p>
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
+      <!-- Total Hours -->
+      <div class="bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg border border-blue-200 dark:border-blue-800 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <p class="text-m font-medium text-blue-800 dark:text-blue-400 transition-colors duration-300">Total Hours</p>
+          <p class="text-xl font-bold text-blue-900 dark:text-blue-300 transition-colors duration-300">{{ totalHours() }}</p>
+        </div>
+      </div>
+
+      <!-- Average Hours -->
+      <div class="bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded-lg border border-green-200 dark:border-green-800 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <p class="text-m font-medium text-green-800 dark:text-green-400 transition-colors duration-300">Avg per Week</p>
+          <p class="text-xl font-bold text-green-900 dark:text-green-300 transition-colors duration-300">{{ averageHours() }}</p>
+        </div>
+      </div>
+
+      <!-- Weeks Tracked -->
+      <div class="bg-purple-50 dark:bg-purple-900/20 px-3 py-2 rounded-lg border border-purple-200 dark:border-purple-800 transition-all duration-300">
+        <div class="flex items-center justify-between">
+          <p class="text-m font-medium text-purple-800 dark:text-purple-400 transition-colors duration-300">Weeks Tracked</p>
+          <p class="text-xl font-bold text-purple-900 dark:text-purple-300 transition-colors duration-300">{{ weekCount() }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg transition-all duration-300">
+      <h3 class="text-sm font-semibold mb-2 text-gray-900 dark:text-white transition-colors duration-300">Hours Over Time</h3>
+      <div style="position: relative; height: 200px;">
+        <canvas id="hoursChart"></canvas>
+      </div>
+    </div>
+  }
+</div>
