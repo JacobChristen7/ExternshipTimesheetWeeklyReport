@@ -1,30 +1,25 @@
 <div class="container mx-auto max-w-7xl">
-  <h1 class="text-4xl font-bold mb-2 dark:text-white transition-colors duration-300">Congrats on your Externship! 🎉</h1>
-  <p class="text-lg text-gray-700 dark:text-gray-300 transition-colors duration-300">
-    Welcome to your externship timesheet and weekly report application.
-  </p>
-
-  <div class="mt-4">
-    <app-analytics></app-analytics>
-  </div>
+  <h1 class="text-4xl font-bold mb-0 dark:text-white transition-colors duration-300">Congrats on your Externship! 🎉</h1>
   
-  <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div class="bg-white dark:bg-gray-800 px-6 pb-6 pt-2 rounded-lg shadow-md text-center transition-all duration-300 hover:scale-105 cursor-pointer" routerLink="/timesheet">
-      <h2 class="text-2xl font-semibold mb-2 dark:text-white transition-colors duration-300">Timesheet</h2>
-      <p class="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Track your externship hours</p>
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+    <p class="text-lg text-gray-700 dark:text-gray-300 transition-colors duration-300">
+      Welcome to your externship timesheet and weekly report application.
+    </p>
+    
+    <div class="flex flex-wrap gap-3">
       <a routerLink="/timesheet" 
-         class="no-underline bg-gray-600 text-gray-300 hover:text-white hover:bg-gray-700 px-4 py-2 rounded-md font-medium transition duration-300 inline-block">
+         class="no-underline bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 hover:scale-105 px-6 py-3 rounded-md font-medium text-base transition-all duration-300 inline-block whitespace-nowrap">
         Go to Timesheet
       </a>
-    </div>
-    
-    <div class="bg-white dark:bg-gray-800 px-6 pb-6 pt-2 rounded-lg shadow-md text-center transition-all duration-300 hover:scale-105 cursor-pointer" routerLink="/report">
-      <h2 class="text-2xl font-semibold mb-2 dark:text-white transition-colors duration-300">Weekly Report</h2>
-      <p class="text-gray-600 dark:text-gray-300 mb-4 transition-colors duration-300">Write and submit reports</p>
       <a routerLink="/report" 
-         class="no-underline bg-gray-600 text-gray-300 hover:text-white hover:bg-gray-700 px-4 py-2 rounded-md font-medium transition duration-300 inline-block">
+         class="no-underline bg-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 hover:scale-105 px-6 py-3 rounded-md font-medium text-base transition-all duration-300 inline-block whitespace-nowrap">
         Go to Report
       </a>
     </div>
   </div>
+
+  <div class="mt-4">
+    <app-analytics></app-analytics>
+  </div>
+
 </div>

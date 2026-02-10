@@ -25,6 +25,10 @@ export class Analytics implements OnInit {
   isLoading = signal(true);
   private weeks: WeekData[] = [];
   private themeObserver: MutationObserver | null = null;
+  
+  requiredHours = signal(240); // The number can be changed
+  progressPercentage = signal(0);
+  remainingHours = signal(240);
 
   async ngOnInit() {
     // Wait for auth to be ready
@@ -36,7 +40,7 @@ export class Analytics implements OnInit {
       }
     });
 
-    // Watch for theme changes
+    // Watch for dark mode change
     this.themeObserver = new MutationObserver(() => {
       if (this.weeks.length > 0) {
         this.createChart(this.weeks);
@@ -71,6 +75,12 @@ export class Analytics implements OnInit {
     this.totalHours.set(total);
     this.weekCount.set(weeks.length);
     this.averageHours.set(weeks.length > 0 ? Math.round(total / weeks.length) : 0);
+    
+    // Calculate progress
+    const required = this.requiredHours();
+    const percentage = Math.min(Math.floor((total / required) * 100), 100);
+    this.progressPercentage.set(percentage);
+    this.remainingHours.set(Math.max(required - total, 0));
   }
 
   createChart(weeks: WeekData[]) {
