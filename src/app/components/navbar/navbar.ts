@@ -14,6 +14,7 @@ export class Navbar {
   authService = inject(Authentication);  // Make it public so template can access it
   private router = inject(Router);
   isDarkMode = signal(false);
+  isDropdownOpen = signal(false);
 
   constructor() {
     // Load dark mode preference from localStorage on init
@@ -22,6 +23,14 @@ export class Navbar {
       this.isDarkMode.set(true);
       document.documentElement.classList.add('dark');
     }
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen.set(!this.isDropdownOpen());
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen.set(false);
   }
 
   toggleDarkMode() {
@@ -40,6 +49,12 @@ export class Navbar {
 
   async logout() {
     await this.authService.signOut();
+    this.closeDropdown();
     this.router.navigate(['/login']);
+  }
+
+  navigateToProfile() {
+    this.closeDropdown();
+    this.router.navigate(['/profile']);
   }
 }
