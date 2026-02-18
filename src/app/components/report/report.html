@@ -75,22 +75,20 @@
         />
       </div>
 
-      <!-- Company Name Field -->
+      <!-- Company Field -->
       <div class="bg-white p-6 rounded-lg shadow-md flex flex-col justify-between dark:bg-gray-800 transition-colors duration-300">
         <label class="block text-lg font-medium text-gray-700 mb-2 dark:text-white transition-colors duration-300">
           Company <span class="text-red-500">*</span>
         </label>
-        <select 
+        <input 
           [(ngModel)]="company"
           name="company"
+          type="text"
           required
-          class="w-full py-2 mt-6 rounded-md border border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
-                 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-transparent cursor-pointer">
-          <option value="" disabled selected hidden>Choose</option>
-          <option value="Company 1">Company 1</option>
-          <option value="Company 2">Company 2</option>
-          <option value="Company 3">Company 3</option>
-        </select>
+          class="w-full py-2 mt-6 border-0 border-b border-gray-400 bg-white text-gray-900 dark:bg-gray-800 dark:text-gray-300 transition-colors duration-300
+                 placeholder:text-gray-400 focus:outline-none focus:ring-0 focus:border-blue-500"
+          placeholder="Your answer"
+        />
       </div>
 
       <!-- Programming Languages Field -->

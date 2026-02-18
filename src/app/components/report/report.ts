@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ReportService } from '../../services/report';
 import { Authentication } from '../../services/auth';
 import { Timesheet } from '../../services/timesheet';
+import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-report',
@@ -16,6 +17,7 @@ export class Report implements OnInit {
   private reportService = inject(ReportService);
   private authService = inject(Authentication);
   private timesheetService = inject(Timesheet);
+  private firestore = inject(Firestore);
 
   email = '';
   week = '';
@@ -40,10 +42,34 @@ export class Report implements OnInit {
       if (user?.email) {
         this.email = user.email;
         
+        // Load externship info from user profile
+        await this.loadExternshipInfo(user.uid);
+        
         // Auto-calculate hours from timesheet data
         await this.calculateHours();
       }
     });
+  }
+
+  async loadExternshipInfo(uid: string) {
+    try {
+      const docRef = doc(this.firestore, 'userProfiles', uid);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        // Auto-populate company and manager fields if user has saved info
+        if (data['companyName']) {
+          this.company = data['companyName'];
+        }
+        if (data['managerName']) {
+          this.manager = data['managerName'];
+        }
+        console.log('Loaded externship info into report:', data);
+      }
+    } catch (error) {
+      console.error('Error loading externship info:', error);
+    }
   }
 
   async calculateHours() {
