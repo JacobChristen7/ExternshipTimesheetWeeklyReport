@@ -62,8 +62,8 @@
   </div>
 
   <!-- Delete Confirmation Modal -->
-  <div *ngIf="showDeleteModal && weekToDelete" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+  <div *ngIf="showDeleteModal && weekToDelete" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="closeDeleteModal()">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full mx-4" (click)="$event.stopPropagation()">
       <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Delete Week</h2>
       <p class="text-gray-600 dark:text-gray-300 mb-6">
         Are you sure you want to delete <span class="font-semibold">Week {{ weekToDelete.weekNumber }}</span> permanently?
@@ -88,36 +88,88 @@
   </div>
 
   <!-- Add Week Menu -->
-  <div *ngIf="showAddWeekPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
+  <div *ngIf="showAddWeekPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" (click)="closeAddWeekPopup()">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-2xl w-full mx-4" (click)="$event.stopPropagation()">
       <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Add a New Week</h2>
-      <p class="text-gray-600 dark:text-gray-300 mb-6">Enter any date - this will create the full week (Mon-Sun)</p>
+      <p class="text-gray-600 dark:text-gray-300 mb-6">Select any date to add the full week (Monday-Sunday)</p>
       
-      <div class="space-y-4">
-        <!-- Date Input -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date (MM/DD/YYYY)</label>
-          <input 
-            type="text"
-            [(ngModel)]="dateInput"
-            placeholder="12/11/2025"
-            class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
-          
-          <p *ngIf="dateError" class="text-red-500 dark:text-red-400 text-sm mt-2">
-            {{ dateError }}
-          </p>
-        </div>
+      <!-- Calendar Header -->
+      <div class="flex items-center justify-between mb-4">
+        <button 
+          (click)="previousMonth()"
+          class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition duration-300 hover:scale-105 cursor-pointer rounded-md border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">{{ currentMonthYear }}</h3>
+        
+        <button 
+          (click)="nextMonth()"
+          class="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition duration-300 hover:scale-105 cursor-pointer rounded-md border-0">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
+
+      <!-- Week Day Headers -->
+      <div class="grid grid-cols-7 gap-1 mb-2">
+        <div class="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2">Mon</div>
+        <div class="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2">Tue</div>
+        <div class="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2">Wed</div>
+        <div class="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2">Thu</div>
+        <div class="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2">Fri</div>
+        <div class="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2">Sat</div>
+        <div class="text-center text-xs font-semibold text-gray-600 dark:text-gray-400 py-2">Sun</div>
+      </div>
+
+      <!-- Calendar Grid -->
+      <div class="grid grid-cols-7 gap-1 mb-4">
+        <button
+          *ngFor="let date of calendarDays"
+          (click)="onDateClick(date)"
+          (mouseenter)="onDateHover(date)"
+          (mouseleave)="onDateHover(null)"
+          [class]="
+            'relative p-2 text-sm rounded-md transition-all duration-200 cursor-pointer border ' +
+            (isInSelectedWeek(date) 
+              ? '!bg-blue-600 dark:!bg-blue-600 !text-white font-semibold hover:!bg-blue-700 dark:hover:!bg-blue-700 !border-blue-600 dark:!border-blue-600' 
+              : isCurrentMonth(date)
+                ? 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
+                : 'bg-white dark:bg-gray-700 text-gray-400 dark:text-gray-500 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-750'
+            ) +
+            (isToday(date) ? ' ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800' : '')
+          ">
+          {{ date?.getDate() }}
+        </button>
+      </div>
+
+      <!-- Selected Week Display - Always visible -->
+      <div class="mb-4 p-3 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 rounded-md border border-blue-200 dark:border-blue-800">
+        <p class="text-sm font-medium text-blue-800 dark:text-blue-200">
+          {{ selectedWeekRange || 'Select a week' }}
+        </p>
+      </div>
+
+      <!-- Error Message -->
+      <p *ngIf="dateError" class="text-red-500 dark:text-red-400 text-sm mb-4">
+        {{ dateError }}
+      </p>
       
-      <div class="flex gap-3 mt-6">
+      <div class="flex gap-3">
         <button 
           (click)="closeAddWeekPopup()"
           class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-800 transition duration-300 cursor-pointer">
           Cancel
         </button>
         <button 
-          (click)="addWeek()"
-          class="flex-1 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-md transition duration-300 cursor-pointer">
+          (click)="confirmAddWeek()"
+          [disabled]="!selectedWeekStart"
+          [class.opacity-50]="!selectedWeekStart"
+          [class.cursor-not-allowed]="!selectedWeekStart"
+          class="flex-1 px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-md transition duration-300 cursor-pointer disabled:hover:bg-blue-700">
           Add Week
         </button>
       </div>

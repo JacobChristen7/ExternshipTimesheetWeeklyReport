@@ -35,6 +35,12 @@ export class Timesheet implements OnInit {
   dateInput = '';
   dateError = '';
   
+  // Calendar-related properties
+  currentCalendarDate = new Date();
+  calendarDays: (Date | null)[] = [];
+  selectedWeekStart: Date | null = null;
+  hoveredDate: Date | null = null;
+  
   // Delete confirmation modal
   showDeleteModal = false;
   weekToDelete: Week | null = null;
@@ -214,13 +220,167 @@ export class Timesheet implements OnInit {
   openAddWeekPopup(): void {
     this.showAddWeekPopup = true;
     const today = new Date();
+    this.currentCalendarDate = new Date(today.getFullYear(), today.getMonth(), 1);
     this.dateInput = `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`;
     this.dateError = '';
+    this.selectedWeekStart = null;
+    this.hoveredDate = null;
+    this.generateCalendar();
   }
 
   closeAddWeekPopup(): void {
     this.showAddWeekPopup = false;
     this.dateError = '';
+    this.selectedWeekStart = null;
+    this.hoveredDate = null;
+  }
+
+  // Calendar navigation methods
+  previousMonth(): void {
+    this.currentCalendarDate = new Date(
+      this.currentCalendarDate.getFullYear(),
+      this.currentCalendarDate.getMonth() - 1,
+      1
+    );
+    this.generateCalendar();
+  }
+
+  nextMonth(): void {
+    this.currentCalendarDate = new Date(
+      this.currentCalendarDate.getFullYear(),
+      this.currentCalendarDate.getMonth() + 1,
+      1
+    );
+    this.generateCalendar();
+  }
+
+  get currentMonthYear(): string {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return `${months[this.currentCalendarDate.getMonth()]} ${this.currentCalendarDate.getFullYear()}`;
+  }
+
+  // Generate calendar grid (6 weeks of 7 days = 42 cells)
+  generateCalendar(): void {
+    const year = this.currentCalendarDate.getFullYear();
+    const month = this.currentCalendarDate.getMonth();
+    
+    // First day of the month
+    const firstDay = new Date(year, month, 1);
+    
+    // Get the day of week (0=Sunday, 1=Monday, etc.)
+    // Monday should be the first column so adjust
+    let firstDayOfWeek = firstDay.getDay();
+    firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1; // Convert to Monday=0
+    
+    // Last day of the month
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    
+    // Previous month info
+    const prevMonthLastDay = new Date(year, month, 0);
+    const daysInPrevMonth = prevMonthLastDay.getDate();
+    
+    // Build calendar array
+    this.calendarDays = [];
+    
+    // Add days from previous month
+    for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+      this.calendarDays.push(new Date(year, month - 1, daysInPrevMonth - i));
+    }
+    
+    // Add days from current month
+    for (let day = 1; day <= daysInMonth; day++) {
+      this.calendarDays.push(new Date(year, month, day));
+    }
+    
+    // Add days from next month to fill the grid (always show 6 weeks = 42 days)
+    const remainingDays = 42 - this.calendarDays.length;
+    for (let day = 1; day <= remainingDays; day++) {
+      this.calendarDays.push(new Date(year, month + 1, day));
+    }
+  }
+
+  // Get the Monday of a given date's week
+  getMondayOfWeek(date: Date): Date {
+    const dayOfWeek = date.getDay();
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+    const monday = new Date(date);
+    monday.setDate(date.getDate() + mondayOffset);
+    return monday;
+  }
+
+  // Get the Sunday of a given date's week
+  getSundayOfWeek(date: Date): Date {
+    const monday = this.getMondayOfWeek(date);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    return sunday;
+  }
+
+  // Check if a date is in the currently selected week
+  isInSelectedWeek(date: Date | null): boolean {
+    if (!date) return false;
+    
+    const weekStart = this.selectedWeekStart || (this.hoveredDate ? this.getMondayOfWeek(this.hoveredDate) : null);
+    if (!weekStart) return false;
+    
+    const weekEnd = this.getSundayOfWeek(weekStart);
+    const dateTime = date.getTime();
+    
+    return dateTime >= weekStart.getTime() && dateTime <= weekEnd.getTime();
+  }
+
+  // Check if a date is in the current calendar month
+  isCurrentMonth(date: Date | null): boolean {
+    if (!date) return false;
+    return date.getMonth() === this.currentCalendarDate.getMonth();
+  }
+
+  // Check if a date is today
+  isToday(date: Date | null): boolean {
+    if (!date) return false;
+    const today = new Date();
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear();
+  }
+
+  // Handle date hover
+  onDateHover(date: Date | null): void {
+    this.hoveredDate = date;
+  }
+
+  // Handle date selection
+  onDateClick(date: Date | null): void {
+    if (!date) return;
+    
+    const monday = this.getMondayOfWeek(date);
+    this.selectedWeekStart = monday;
+    
+    // Clear any previous error
+    this.dateError = '';
+  }
+
+  // Get the week range text for display
+  get selectedWeekRange(): string {
+    const weekStart = this.selectedWeekStart || (this.hoveredDate ? this.getMondayOfWeek(this.hoveredDate) : null);
+    if (!weekStart) return '';
+    
+    const weekEnd = this.getSundayOfWeek(weekStart);
+    return `Selected Week: ${this.formatDate(weekStart)} - ${this.formatDate(weekEnd)}`;
+  }
+
+  // Confirm adding the selected week
+  async confirmAddWeek(): Promise<void> {
+    if (!this.selectedWeekStart) {
+      this.dateError = 'Please select a week from the calendar';
+      return;
+    }
+
+    await this.addWeekFromDate(this.selectedWeekStart);
   }
 
   openDeleteModal(week: Week): void {
