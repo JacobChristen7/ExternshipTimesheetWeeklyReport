@@ -30,8 +30,19 @@ export class WeekCard {
     return this.days.reduce((sum, day) => sum + (day.hours || 0), 0);
   }
 
+  onHoursFocus(event: FocusEvent) {
+    const input = event.target as HTMLInputElement;
+    if (input.value === '0') {
+      input.select();
+    }
+  }
+
   // Called when user clicks out of hours field
   onHoursBlur(dayIndex: number) {
+    // If hours is empty, null, undefined, or NaN, default to 0
+    if (!this.days[dayIndex].hours && this.days[dayIndex].hours !== 0) {
+      this.days[dayIndex].hours = 0;
+    }
     this.hoursChanged.emit(dayIndex);
   }
 
