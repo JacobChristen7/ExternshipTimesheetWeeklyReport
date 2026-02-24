@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Authentication } from '../../services/auth';
@@ -60,6 +60,13 @@ export class Profile implements OnInit {
     } catch (error) {
       console.error('Error loading externship info:', error);
     }
+  }
+
+  @HostListener('document:keydown.enter')
+  handleEnterKey() {
+    if (this.isSaving()) return;
+    
+    this.saveExternshipInfo();
   }
 
   async saveExternshipInfo() {

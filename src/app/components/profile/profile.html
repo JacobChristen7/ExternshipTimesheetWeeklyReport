@@ -91,7 +91,7 @@
         <p class="text-gray-800 dark:text-gray-200 transition-colors duration-300">
           (this info will be added to the proper fields in the report page)
         </p>
-        <form class="space-y-4 max-w-full">
+        <form (ngSubmit)="saveExternshipInfo()" class="space-y-4 max-w-full">
           <div class="space-y-4">
             <!-- Company Name -->
             <div>
@@ -136,8 +136,7 @@
               </p>
             }
             <button
-              type="button"
-              (click)="saveExternshipInfo()"
+              type="submit"
               [disabled]="isSaving()"
               class="px-6 py-2 mt-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg transition-all duration-300 hover:scale-105 border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100">
               Save Information

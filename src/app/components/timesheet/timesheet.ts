@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { WeekCard } from './week-card/week-card';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -50,6 +50,40 @@ export class Timesheet implements OnInit {
   isLoading = false;
 
   private readonly CURRENT_PAGE_KEY = 'timesheet-current-page';
+
+  // Left arrow key for previous week
+  @HostListener('window:keydown.arrowleft', ['$event'])
+  handleLeftArrow(event: Event) {
+    // Don't trigger if user is typing in an input, textarea, or if modals are open
+    if (event.target instanceof HTMLInputElement || 
+        event.target instanceof HTMLTextAreaElement ||
+        this.showAddWeekPopup ||
+        this.showDeleteModal) {
+      return;
+    }
+
+    if (this.canGoBack) {
+      this.previousWeek();
+      event.preventDefault(); // Prevent page scroll
+    }
+  }
+
+  // Right arrow key for next week
+  @HostListener('window:keydown.arrowright', ['$event'])
+  handleRightArrow(event: Event) {
+    // Don't trigger if user is typing in an input, textarea, or if modals are open
+    if (event.target instanceof HTMLInputElement || 
+        event.target instanceof HTMLTextAreaElement ||
+        this.showAddWeekPopup ||
+        this.showDeleteModal) {
+      return;
+    }
+
+    if (this.canGoNext) {
+      this.nextWeek();
+      event.preventDefault(); // Prevent page scroll
+    }
+  }
 
   // Load weeks from Firestore when component initializes
   async ngOnInit() {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReportService } from '../../services/report';
@@ -88,6 +88,13 @@ export class Report implements OnInit {
       console.error('Error calculating hours:', error);
       // If calculation fails, leave at 0 - user can still enter manually
     }
+  }
+
+  @HostListener('document:keydown.enter')
+  handleEnterKey() {
+    if (this.isSubmitting) return;
+    
+    this.onSubmit();
   }
   
   async onSubmit() {
