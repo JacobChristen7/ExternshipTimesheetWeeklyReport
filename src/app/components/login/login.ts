@@ -18,6 +18,7 @@ export class Login implements OnInit {
   email = '';
   password = '';
   errorMessage = '';
+  successMessage = '';
   isSignUp = false;  // Toggle between sign in/sign up
   loading = false;
   returnUrl = '/';  // Default to home page
@@ -65,5 +66,26 @@ export class Login implements OnInit {
   toggleMode() {
     this.isSignUp = !this.isSignUp;
     this.errorMessage = '';
+    this.successMessage = '';
+  }
+
+  async onForgotPassword() {
+    if (!this.email) {
+      this.errorMessage = 'Please enter your email address.';
+      return;
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.loading = true;
+
+    try {
+      await this.authService.resetPassword(this.email);
+      this.successMessage = 'Password reset email sent! Check your inbox.';
+    } catch (error: any) {
+      this.errorMessage = error;
+    } finally {
+      this.loading = false;
+    }
   }
 }
