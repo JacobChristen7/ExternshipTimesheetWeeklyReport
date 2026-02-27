@@ -7,7 +7,8 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300">
       
       <!-- Profile Header -->
-      <div class="flex items-start justify-between pb-3 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="pb-3 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="flex items-start justify-between">
         <div class="flex items-start space-x-3 sm:space-x-6 overflow-hidden flex-1">
           <!-- Profile Picture/Upload Button -->
           <div class="flex flex-col items-center space-y-3 flex-shrink-0">
@@ -33,19 +34,71 @@
           </div>
         </div>
 
-        <!-- Settings Button (does nothing right now but I may add stuff later or just remove it) -->
-        <div class="relative group flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <!-- Reset Password Message -->
+          @if (resetPasswordMessage()) {
+            <p class="text-sm font-medium transition-opacity duration-500 p-0 m-0 flex items-center"
+               [class.opacity-0]="!showResetPasswordMessage()"
+               [class.opacity-100]="showResetPasswordMessage()"
+               [ngClass]="{
+                 'text-green-600 dark:text-green-400': resetPasswordMessageType() === 'success',
+                 'text-red-600 dark:text-red-400': resetPasswordMessageType() === 'error'
+               }">
+              {{ resetPasswordMessage() }}
+            </p>
+          }
+
+          <!-- Settings Button with Dropdown -->
+          <div class="relative group flex-shrink-0">
           <button
+            (click)="toggleSettingsDropdown()"
             class="p-0 bg-transparent hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-0 border-0 cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-300">
               <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" clip-rule="evenodd" />
             </svg>
           </button>
+          
           <!-- Tooltip -->
-          <div class="absolute right-0 mt-1 px-2 py-1 bg-gray-600 dark:bg-gray-700 text-white text-xs rounded shadow-lg whitespace-nowrap z-10
-                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-600 dark:bg-gray-700 text-white text-xs rounded shadow-lg whitespace-nowrap z-10
+                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+               [class.!opacity-0]="isSettingsDropdownOpen()">
             Settings
           </div>
+
+          <!-- Dropdown Menu -->
+          @if (isSettingsDropdownOpen()) {
+            <div class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 border-2 border-solid border-gray-300 dark:border-gray-700 rounded-xl shadow-2xl py-2 px-2 z-50 transition-all duration-300">
+              <!-- Reset Password Option -->
+              <button
+                (click)="sendPasswordResetEmail()"
+                class="w-full text-left px-2 py-2 text-sm text-gray-700 dark:text-gray-200 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-all duration-300 flex items-center gap-3 border border-gray-100 dark:border-gray-700 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                  <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                </svg>
+                Reset Password
+              </button>
+
+              <!-- Delete Account Option -->
+              <button
+                (click)="openDeleteModal()"
+                class="w-full text-left px-2 py-2 text-sm text-red-600 dark:text-red-400 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-all duration-300 flex items-center gap-3 border border-gray-100 dark:border-gray-700 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                  <path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd" />
+                </svg>
+                Delete Account
+              </button>
+            </div>
+          }
+
+          <!-- Click Outside to Close -->
+          @if (isSettingsDropdownOpen()) {
+            <div 
+              (click)="closeSettingsDropdown()"
+              class="fixed inset-0 z-40">
+            </div>
+          }
+          </div>
+        </div>
         </div>
       </div>
 
@@ -143,6 +196,75 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  }
+
+  <!-- Delete Account Confirmation Modal -->
+  @if (showDeleteModal()) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" (click)="closeDeleteModal()">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-md w-full p-6 transition-all duration-300" (click)="$event.stopPropagation()">
+        <!-- Warning Header -->
+        <div class="flex items-center gap-3 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-red-600 dark:text-red-400">
+            <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+          </svg>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">Delete Account</h3>
+        </div>
+
+        <!-- Warning Message -->
+        <div class="mb-6">
+          <p class="text-gray-700 dark:text-gray-300 mb-2">
+            Are you sure you want to delete <span class="font-semibold text-red-600 dark:text-red-400">{{ user()?.email }}</span>'s account?
+          </p>
+          <p class="text-red-600 dark:text-red-400 font-semibold text-sm">
+            ⚠️ This cannot be undone. All your data will be permanently deleted.
+          </p>
+        </div>
+
+        <!-- Password Input (Email/Password Users Only) -->
+        @if (!isGoogleUser) {
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+              Enter your password to confirm
+            </label>
+            <input
+              type="password"
+              [(ngModel)]="deletePassword"
+              placeholder="Your password"
+              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-red-500"
+              (keydown.enter)="deleteAccount()"
+            />
+          </div>
+        } @else {
+          <!-- Google User Message -->
+          <div class="mb-6">
+            <p class="text-sm text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
+              You'll be prompted to sign in with Google to confirm this action.
+            </p>
+          </div>
+        }
+
+        <!-- Error Message -->
+        @if (deleteError) {
+          <p class="text-red-600 dark:text-red-400 text-sm mb-4">{{ deleteError }}</p>
+        }
+
+        <!-- Action Buttons -->
+        <div class="flex gap-3 justify-end">
+          <button
+            (click)="closeDeleteModal()"
+            [disabled]="isDeleting"
+            class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-all duration-300 border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+            Cancel
+          </button>
+          <button
+            (click)="deleteAccount()"
+            [disabled]="isDeleting || (!isGoogleUser && !deletePassword)"
+            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 border-0 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ isDeleting ? 'Deleting...' : 'Delete Account' }}
+          </button>
+        </div>
       </div>
     </div>
   }

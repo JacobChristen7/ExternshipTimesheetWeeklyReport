@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Auth, user, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, User } from '@angular/fire/auth';
+import { Auth, user, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut, sendPasswordResetEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup, User } from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -60,6 +60,63 @@ async signUp(email: string, password: string) {
     }
   }
 
+  // Send password reset email
+  async resetPassword(email: string) {
+    try {
+      await sendPasswordResetEmail(this.auth, email);
+    } catch (error: any) {
+      throw this.handleError(error);
+    }
+  }
+
+  // Re-authenticate user with password (required before deletion)
+  async reauthenticate(password: string) {
+    try {
+      const user = this.currentUser();
+      if (!user || !user.email) {
+        throw new Error('No user logged in');
+      }
+      const credential = EmailAuthProvider.credential(user.email, password);
+      await reauthenticateWithCredential(user, credential);
+    } catch (error: any) {
+      throw this.handleError(error);
+    }
+  }
+
+  // Re-authenticate user with Google (required before deletion)
+  async reauthenticateWithGoogle() {
+    try {
+      const user = this.currentUser();
+      if (!user) {
+        throw new Error('No user logged in');
+      }
+      const provider = new GoogleAuthProvider();
+      await reauthenticateWithPopup(user, provider);
+    } catch (error: any) {
+      throw this.handleError(error);
+    }
+  }
+
+  // Check if user signed in with Google
+  isGoogleUser(): boolean {
+    const user = this.currentUser();
+    if (!user) return false;
+    return user.providerData.some(provider => provider.providerId === 'google.com');
+  }
+
+  // Delete user account
+  async deleteAccount() {
+    try {
+      const user = this.currentUser();
+      if (!user) {
+        throw new Error('No user logged in');
+      }
+      await deleteUser(user);
+    } catch (error: any) {
+      throw this.handleError(error);
+    }
+  }
+
   // Get current user ID
   getCurrentUserId(): string | null {
     return this.currentUser()?.uid || null;
@@ -85,6 +142,18 @@ async signUp(email: string, password: string) {
         return 'Incorrect password.';
       case 'auth/invalid-credential':
         return 'Invalid email or password.';
+      case 'auth/user-not-found':
+        return 'No account found with this email.';
+      case 'auth/too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      case 'auth/requires-recent-login':
+        return 'Please sign in again before deleting your account.';
+      case 'auth/popup-closed-by-user':
+        return 'Sign-in popup was closed. Please try again.';
+      case 'auth/popup-blocked':
+        return 'Popup was blocked by your browser. Please allow popups and try again.';
+      case 'auth/cancelled-popup-request':
+        return 'Sign-in was cancelled.';
       default:
         return error.message || 'An error occurred.';
     }
