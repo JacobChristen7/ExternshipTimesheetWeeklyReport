@@ -142,8 +142,6 @@ async signUp(email: string, password: string) {
         return 'Incorrect password.';
       case 'auth/invalid-credential':
         return 'Invalid email or password.';
-      case 'auth/user-not-found':
-        return 'No account found with this email.';
       case 'auth/too-many-requests':
         return 'Too many attempts. Please try again later.';
       case 'auth/requires-recent-login':
