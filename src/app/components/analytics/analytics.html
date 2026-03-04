@@ -1,4 +1,4 @@
-<div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-1 rounded-lg shadow-md transition-all duration-300 mb-2">
+<div class="bg-white dark:bg-gray-800 px-4 pb-4 pt-1 rounded-lg shadow-md transition-all duration-300 mb-1">
   <h2 class="text-xl font-bold mb-3 text-gray-800 dark:text-white transition-colors duration-300">
       Hours Analytics
   </h2>
@@ -17,7 +17,7 @@
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-3">
       <!-- Total Hours -->
-      <div class="bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg border border-blue-200 dark:border-blue-800 transition-all duration-300">
+      <div class="bg-blue-50 dark:bg-blue-900/20 px-3 rounded-lg border border-blue-200 dark:border-blue-800 transition-all duration-300">
         <div class="flex items-center justify-between">
           <p class="text-m font-medium text-blue-800 dark:text-blue-400 transition-colors duration-300">Total Hours</p>
           <p class="text-xl font-bold text-blue-900 dark:text-blue-300 transition-colors duration-300">{{ totalHours() }}</p>
@@ -25,7 +25,7 @@
       </div>
 
       <!-- Average Hours -->
-      <div class="bg-green-50 dark:bg-green-900/20 px-3 py-2 rounded-lg border border-green-200 dark:border-green-800 transition-all duration-300">
+      <div class="bg-green-50 dark:bg-green-900/20 px-3 rounded-lg border border-green-200 dark:border-green-800 transition-all duration-300">
         <div class="flex items-center justify-between">
           <p class="text-m font-medium text-green-800 dark:text-green-400 transition-colors duration-300">Avg per Week</p>
           <p class="text-xl font-bold text-green-900 dark:text-green-300 transition-colors duration-300">{{ averageHours() }}</p>
@@ -33,7 +33,7 @@
       </div>
 
       <!-- Weeks Tracked -->
-      <div class="bg-purple-50 dark:bg-purple-900/20 px-3 py-2 rounded-lg border border-purple-200 dark:border-purple-800 transition-all duration-300">
+      <div class="bg-purple-50 dark:bg-purple-900/20 px-3 rounded-lg border border-purple-200 dark:border-purple-800 transition-all duration-300">
         <div class="flex items-center justify-between">
           <p class="text-m font-medium text-purple-800 dark:text-purple-400 transition-colors duration-300">Weeks Tracked</p>
           <p class="text-xl font-bold text-purple-900 dark:text-purple-300 transition-colors duration-300">{{ weekCount() }}</p>
@@ -43,10 +43,73 @@
 
     <!-- Chart -->
     <div class="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-lg transition-all duration-300">
-      <h3 class="text-sm font-semibold mb-2 text-gray-900 dark:text-white transition-colors duration-300">Hours Over Time</h3>
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-semibold text-gray-900 dark:text-white transition-colors duration-300">Hours Over Time</h3>
+        
+        <!-- Settings Button with Dropdown -->
+        <div class="relative group">
+          <button
+            (click)="toggleSettingsDropdown()"
+            class="p-0 bg-transparent hover:scale-110 transition-all duration-300 focus:outline-none focus:ring-0 border-0 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors duration-300">
+              <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z" clip-rule="evenodd" />
+            </svg>
+          </button>
+          
+          <!-- Tooltip -->
+          <div class="absolute right-full mr-2 top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-600 dark:bg-gray-700 text-white text-xs rounded shadow-lg whitespace-nowrap z-10
+                      opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+               [class.!opacity-0]="isSettingsDropdownOpen()">
+            Settings
+          </div>
+
+          <!-- Dropdown Menu -->
+          @if (isSettingsDropdownOpen()) {
+            <div class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border-2 border-solid border-gray-300 dark:border-gray-700 rounded-xl shadow-2xl py-2 px-2 z-50 transition-all duration-300">
+              <!-- Shown Weeks Option -->
+              <button
+                (click)="openWeeksModal()"
+                class="w-full text-left px-2 py-2 text-sm text-gray-700 dark:text-gray-200 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-all duration-300 flex items-center gap-3 border border-gray-100 dark:border-gray-700 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+                  <path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+                  <path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd" />
+                </svg>
+                Shown Weeks
+              </button>
+            </div>
+          }
+
+          <!-- Click Outside to Close -->
+          @if (isSettingsDropdownOpen()) {
+            <div 
+              (click)="closeSettingsDropdown()"
+              class="fixed inset-0 z-40">
+            </div>
+          }
+        </div>
+      </div>
+      
       <div style="position: relative; height: 200px;">
         <canvas id="hoursChart"></canvas>
       </div>
+
+      <!-- Pagination Dots -->
+      @if (totalPages() > 1) {
+        <div class="flex justify-center items-center gap-2 mt-3">
+          @for (pageNum of pageNumbers; track pageNum) {
+            <button
+              (click)="goToPage(pageNum)"
+              class="w-2.5 h-2.5 rounded-full transition-all duration-300 border-0 cursor-pointer p-0"
+              [class.bg-blue-600]="currentPage() === pageNum"
+              [class.dark:bg-blue-400]="currentPage() === pageNum"
+              [class.bg-gray-300]="currentPage() !== pageNum"
+              [class.dark:bg-gray-600]="currentPage() !== pageNum"
+              [class.scale-125]="currentPage() === pageNum"
+              [attr.aria-label]="'Go to page ' + (pageNum + 1)">
+            </button>
+          }
+        </div>
+      }
     </div>
 
     <!-- Progress Bar -->
@@ -90,3 +153,63 @@
     </div>
   }
 </div>
+
+<!-- Weeks Per Page Modal -->
+@if (isWeeksModalOpen()) {
+  <div (click)="closeWeeksModal()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300">
+    <div (click)="$event.stopPropagation()" class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-6 w-full max-w-md mx-4 transition-all duration-300">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white transition-colors duration-300">
+          Weeks Per Page
+        </h3>
+        <button
+          (click)="closeWeeksModal()"
+          class="p-1 bg-transparent hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all duration-300 border-0 cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-gray-600 dark:text-gray-400">
+            <path fill-rule="evenodd" d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z" clip-rule="evenodd" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-300 transition-colors duration-300">
+            Number of weeks to show
+          </label>
+          <span class="text-lg font-bold text-blue-600 dark:text-blue-400 transition-colors duration-300">
+            {{ weeksPerPage() }}
+          </span>
+        </div>
+        
+        <input
+          type="range"
+          min="4"
+          [max]="weekCount()"
+          [value]="weeksPerPage()"
+          (input)="updateWeeksPerPage(+$any($event.target).value)"
+          class="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer
+                 slider-thumb:appearance-none slider-thumb:w-4 slider-thumb:h-4 slider-thumb:rounded-full slider-thumb:bg-blue-600 slider-thumb:cursor-pointer
+                 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+          style="accent-color: rgb(37, 99, 235);">
+        
+        <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1 transition-colors duration-300">
+          <span>4 weeks (min)</span>
+          <span>{{ weekCount() }} weeks</span>
+        </div>
+      </div>
+
+      <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800 transition-all duration-300">
+        <p class="text-xs text-gray-700 dark:text-gray-300 transition-colors duration-300">
+          <strong>Note:</strong> Adjust the slider to change how many weeks are displayed per page. 
+          Use the dots below the graph to navigate between pages.
+        </p>
+      </div>
+
+      <button
+        (click)="closeWeeksModal()"
+        class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md font-medium transition-all duration-300 border-0 cursor-pointer">
+        Done
+      </button>
+    </div>
+  </div>
+}
